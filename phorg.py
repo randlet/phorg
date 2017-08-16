@@ -2,6 +2,7 @@ import glob
 import os
 import shutil
 import sys
+import datetime
 
 import piexif
 
@@ -31,12 +32,23 @@ for f in glob.glob(globber):
         print("Couldn't process %s" % f)
         continue
 
-    datedir =  os.path.join(outdir, date)
+    datedir = os.path.join(outdir, date)
     if not os.path.isdir(datedir):
         os.mkdir(datedir)
 
     shutil.move(f, os.path.join(datedir, os.path.basename(f)))
 
 
+globber = os.path.join(root, "*mp4")
 
 
+for f in glob.glob(globber):
+
+    mtime = os.path.getmtime(f)
+    date = datetime.datetime.fromtimestamp(mtime).strftime("%Y-%m-%d")
+
+    datedir = os.path.join(outdir, date)
+    if not os.path.isdir(datedir):
+        os.mkdir(datedir)
+
+    shutil.move(f, os.path.join(datedir, os.path.basename(f)))
